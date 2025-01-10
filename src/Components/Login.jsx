@@ -1,29 +1,40 @@
 import React from "react";
 import LoginBG from "../assets/LoginBG.jpg";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { hodSet, managerSet } from "../Store/reducers/Login";
 
 const Login = () => {
   const [formData, setFormData] = React.useState({
     username: "",
     password: "",
   });
-
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const hod  = useSelector((state) => state.Login.hod);
+    const  manager  = useSelector((state) => state.Login.manager);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
+
   const handleFormSubmit = (e) => {
     e.preventDefault(); // Prevent default form submission
     // alert(`Form Data: ${JSON.stringify(formData)}`);
     if (formData.username === "hod" && formData.password === "hod") {
+      dispatch(hodSet({ isAuthenticated: true }));
       navigate("/hod");
-    } else if (formData.username === "manager" && formData.password === "manager") {
-        navigate("/manager");
-    }
-    else {
-        alert("Invalid Credentials");
+    } else if (
+      formData.username === "manager" &&
+      formData.password === "manager"
+    ) {
+      navigate("/manager");
+      dispatch(managerSet({ isAuthenticated: true }));
+    } else {
+      alert("Invalid Credentials");
     }
   };
 
@@ -31,6 +42,10 @@ const Login = () => {
     console.log("Form Data:", formData);
   }, [formData]);
 
+  React.useEffect(() => {
+    console.log("USER TYPE LOGIN",manager);
+    console.log("HOD",hod);
+  }, [hod,manager]);
   return (
     <>
       <div className="w-full max-w-xs login-div">
