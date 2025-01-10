@@ -1,0 +1,100 @@
+import React from "react";
+import LoginBG from "../assets/LoginBG.jpg";
+import { useNavigate } from "react-router-dom";
+
+const Login = () => {
+  const [formData, setFormData] = React.useState({
+    username: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault(); // Prevent default form submission
+    // alert(`Form Data: ${JSON.stringify(formData)}`);
+    if (formData.username === "hod" && formData.password === "hod") {
+      navigate("/hod");
+    } else if (formData.username === "manager" && formData.password === "manager") {
+        navigate("/manager");
+    }
+    else {
+        alert("Invalid Credentials");
+    }
+  };
+
+  React.useEffect(() => {
+    console.log("Form Data:", formData);
+  }, [formData]);
+
+  return (
+    <>
+      <div className="w-full max-w-xs login-div">
+        <img src={LoginBG} alt="login-bg-image" className="login-bg" />
+
+        <form
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 form-div"
+          onSubmit={handleFormSubmit} // Handle form submission
+        >
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="username"
+            >
+              Username
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="username"
+              type="text"
+              placeholder="Username"
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange} // Update state on input change
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              id="password"
+              type="password"
+              placeholder="******************"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange} // Update state on input change
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit" // Submit the form
+            >
+              Sign In
+            </button>
+            <a
+              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+              href="#"
+            >
+              Forgot Password?
+            </a>
+          </div>
+        </form>
+        <p className="text-center text-gray-500 text-xs">
+          &copy;2025 ESDS Software Solutions. All rights reserved.
+        </p>
+      </div>
+    </>
+  );
+};
+
+export default Login;
