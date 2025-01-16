@@ -3,7 +3,8 @@ import LoginBG from "../assets/LoginBG.jpg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { hodSet, managerSet } from "../Store/reducers/Login";
-
+import axios from "../utils/axios";
+import authService from "../services/authService";
 const Login = () => {
   const [formData, setFormData] = React.useState({
     username: "",
@@ -11,7 +12,7 @@ const Login = () => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [error, setError] = React.useState("");
   const hod  = useSelector((state) => state.Login.hod);
     const  manager  = useSelector((state) => state.Login.manager);
 
@@ -21,20 +22,14 @@ const Login = () => {
 
 
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
-    // alert(`Form Data: ${JSON.stringify(formData)}`);
-    if (formData.username === "hod" && formData.password === "hod") {
-      dispatch(hodSet({ isAuthenticated: true }));
-      navigate("/hod");
-    } else if (
-      formData.username === "manager" &&
-      formData.password === "manager"
-    ) {
-      navigate("/manager");
-      dispatch(managerSet({ isAuthenticated: true }));
-    } else {
-      alert("Invalid Credentials");
+    setError(""); // Clear previous errors
+
+    try {
+      await authService.login(formData.username, formData.password, dispatch, navigate);
+    } catch (err) {
+      setError(err.message || 'Something went wrong');
     }
   };
 
@@ -89,6 +84,7 @@ const Login = () => {
               onChange={handleInputChange} // Update state on input change
             />
           </div>
+          {error && <p className="text-red-500 text-xs italic">{error}</p>}
           <div className="flex items-center justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

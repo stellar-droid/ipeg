@@ -6,6 +6,7 @@ import Login from "../Components/Login";
 import Manager from "../Components/Users/Manager";
 import Hod from "../Components/Users/Hod";
 import { useSelector } from "react-redux";
+import PoForm from "../Components/ReusableComponents/PoForm";
 const MainRoutes = () => {
 
   const hod  = useSelector((state) => state.Login.hod);
@@ -16,12 +17,12 @@ const MainRoutes = () => {
         <Route path="/" element={<AdminLayout />}>
           <Route path="/Workflow" element={<Workflow />} />
           {/* <Route path="/designation" element={<Designations />} /> */}
+        <Route path="/poform" element={<PoForm/>}/>
         </Route>
 
         <Route path="/login" element={<Login />} />
         {manager.isAuthenticated&& <Route path="/manager" element={<Manager />} />}
         {hod.isAuthenticated &&<Route path="/hod" element={<Hod />} />}
-
       </Routes>
     </Suspense>
   );
