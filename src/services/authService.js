@@ -1,19 +1,24 @@
 import axios from '../utils/axios'; // Assuming you have your axios instance configured
-
-const login = async (username, password, dispatch, navigate) => {
+import { managerSet } from '../Store/reducers/Login';
+import { hodSet } from '../Store/reducers/Login';
+import { jwtDecode } from "jwt-decode";
+const Login = async (username, password, dispatch, navigate) => {
   try {
-    const response = await axios.post('http://172.16.22.35:9001/login/', {
+    const response = await axios.post('/login', {
       username,
       password,
     });
-
-    const { authToken } = response.data;
-
+    console.log("Response ", response)
+    const { access_token } = response.data;
+    console.log("Access Token ", access_token)
     // Save the token in localStorage
-    localStorage.setItem('authToken', authToken);
+    localStorage.setItem('access_token', access_token);
 
     // Decode the token to get the role
-    const role = JSON.parse(atob(authToken.split('.')[1])).role;
+    // const role = JSON.parse(atob(access_token.split('.')[1])).role;
+    // const role = JSON.parse(new TextDecoder().decode(Uint8Array.from(jwtDecode(access_token.split('.')[1]), c => c.charCodeAt(0)))).role;
+    const decoded = jwtDecode(access_token);
+    const role = decoded.role;
 
     // Dispatch role-based state and navigate accordingly
     if (role === 'manager') {
@@ -34,5 +39,5 @@ const login = async (username, password, dispatch, navigate) => {
 };
 
 export default {
-  login,
+  Login,
 };

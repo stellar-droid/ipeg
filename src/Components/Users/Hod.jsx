@@ -1,9 +1,12 @@
-import React from 'react'
-
+import React from "react";
+import Admin from "../Admin";
 const Hod = () => {
+ 
   return (
-    <div>Hod</div>
-  )
-}
+    <>
+      <Admin user="hod" />
+    </>
+  );
+};
 
-export default Hod
+export default Hod;

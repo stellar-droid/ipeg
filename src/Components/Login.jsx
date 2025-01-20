@@ -27,7 +27,7 @@ const Login = () => {
     setError(""); // Clear previous errors
 
     try {
-      await authService.login(formData.username, formData.password, dispatch, navigate);
+      await authService.Login(formData.username, formData.password, dispatch, navigate);
     } catch (err) {
       setError(err.message || 'Something went wrong');
     }
@@ -38,7 +38,7 @@ const Login = () => {
   }, [formData]);
 
   React.useEffect(() => {
-    console.log("USER TYPE LOGIN",manager);
+    console.log("Manager",manager);
     console.log("HOD",hod);
   }, [hod,manager]);
   return (

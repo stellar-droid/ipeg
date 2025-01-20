@@ -10,14 +10,14 @@ import {
   Mail,
 } from "lucide-react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { use } from "react";
 
-const AdminLayout = () => {
+
+const AdminLayout = ({ user }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isLangDropdownOpen, setLangDropdownOpen] = useState(false);
   const [isNotificationOpen, setNotificationOpen] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
-const navigate = useNavigate();
+  const navigate = useNavigate();
   // Refs for dropdown menus
   const langRef = useRef(null);
   const notificationRef = useRef(null);
@@ -60,13 +60,12 @@ const navigate = useNavigate();
     { id: 3, text: "New feedback received", time: "2h ago" },
   ];
 
-const NavigationLinks = (item) => {
-  if(item==="My Forms"){
-    navigate("/poform");
-  }
-  else
-  navigate(`/${item}`);
-};
+  const NavigationLinks = (item) => {
+    console.log("Item", item);
+    if (item === "My Forms") {
+      navigate("/poform");
+    } else navigate(`/${item}`);
+  };
 
   return (
     <div className="  w-100 flex  bg-gray-100">
@@ -79,8 +78,23 @@ const NavigationLinks = (item) => {
         {/* Logo Section */}
         <div className="p-4 border-b border-orange-600">
           <div className="flex items-center space-x-2">
-            <div type="button" onClick={()=>{navigate("/")}} className="w-8 h-8 bg-white rounded-full flex-shrink-0" />
-            {isSidebarOpen && <span  onClick={()=>{navigate("/")}} className="font-semibold cursor-pointer  hover:text-blue-700 ">IPeG</span>}
+            <div
+              type="button"
+              onClick={() => {
+                navigate("/");
+              }}
+              className="w-8 h-8 bg-white rounded-full flex-shrink-0"
+            />
+            {isSidebarOpen && (
+              <span
+                onClick={() => {
+                  navigate("/");
+                }}
+                className="font-semibold cursor-pointer  hover:text-blue-700 "
+              >
+                IPeG
+              </span>
+            )}
           </div>
         </div>
 
@@ -102,7 +116,9 @@ const NavigationLinks = (item) => {
                 item === "Workflow" ? "bg-orange-600" : ""
               } flex items-center`}
               title={!isSidebarOpen ? item : ""}
-              onClick={()=>{NavigationLinks(item)}}
+              onClick={() => {
+                NavigationLinks(item);
+              }}
             >
               <span className="w-6 h-6 flex-shrink-0">•</span>
               {isSidebarOpen && <span className="ml-2">{item}</span>}
@@ -122,7 +138,7 @@ const NavigationLinks = (item) => {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <span className="font-semibold">WorkFlow</span>
+            <span className="font-semibold">{user ? user : "Workflow"}</span>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -219,7 +235,15 @@ const NavigationLinks = (item) => {
                       Messages
                     </button>
                     <div className="border-t border-gray-100">
-                      <button className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full">
+                      <button
+                       onClick={() => {
+                        if (user === "hod") {
+                          localStorage.removeItem("access_token");
+                          navigate("/login");
+                        }
+                      }}
+                        className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full"
+                      >
                         <LogOut className="h-4 w-4 mr-2" />
                         Sign out
                       </button>
