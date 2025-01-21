@@ -10,6 +10,7 @@ import {
   Mail,
 } from "lucide-react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 const AdminLayout = ({ user }) => {
@@ -50,7 +51,7 @@ const AdminLayout = ({ user }) => {
     "My Forms",
     "Citizen Appointment List",
     "Citizen Feedback",
-    "Workflow",
+    "workflow",
     "Broadcast Notification",
   ];
 
@@ -60,12 +61,16 @@ const AdminLayout = ({ user }) => {
     { id: 3, text: "New feedback received", time: "2h ago" },
   ];
 
-  const NavigationLinks = (item) => {
-    console.log("Item", item);
-    if (item === "My Forms") {
-      navigate("/poform");
-    } else navigate(`/${item}`);
-  };
+  // const NavigationLinks = (item) => {
+  //   console.log("Item", item);
+  //   if (item === "My Forms") {
+  //     navigate("/poform");
+  //   } 
+  //   else if(item=== "Workflow"){
+  //     navigate("Workflow");
+  //   }
+  //   else navigate(`/${item}`);
+  // };
 
   return (
     <div className="  w-100 flex  bg-gray-100">
@@ -81,14 +86,14 @@ const AdminLayout = ({ user }) => {
             <div
               type="button"
               onClick={() => {
-                navigate("/");
+                navigate(`/${user}`);
               }}
               className="w-8 h-8 bg-white rounded-full flex-shrink-0"
             />
             {isSidebarOpen && (
               <span
                 onClick={() => {
-                  navigate("/");
+                  navigate(`/${user}`);
                 }}
                 className="font-semibold cursor-pointer  hover:text-blue-700 "
               >
@@ -109,21 +114,25 @@ const AdminLayout = ({ user }) => {
 
         {/* Navigation Links */}
         <nav className="mt-4">
-          {navItems.map((item, index) => (
-            <div
-              key={index}
-              className={`px-4 py-3 hover:bg-orange-600 cursor-pointer ${
-                item === "Workflow" ? "bg-orange-600" : ""
-              } flex items-center`}
-              title={!isSidebarOpen ? item : ""}
-              onClick={() => {
-                NavigationLinks(item);
-              }}
-            >
-              <span className="w-6 h-6 flex-shrink-0">•</span>
-              {isSidebarOpen && <span className="ml-2">{item}</span>}
-            </div>
-          ))}
+        {navItems.map((item, index) => (
+    <div
+      key={index}
+      className={`px-4 py-3 hover:bg-orange-600 cursor-pointer ${
+        item === "workflow" ? "bg-orange-600" : ""
+      } flex items-center`}
+      title={!isSidebarOpen ? item : ""}
+    >
+      <span className="w-6 h-6 flex-shrink-0">•</span>
+      {isSidebarOpen && (
+        <Link
+          to={item === "workflow" ? "workflow" : item === "My Forms" ? "poform" : `/${item}`}
+          className="ml-2 text-white"
+        >
+          {item}
+        </Link>
+      )}
+    </div>
+  ))}
         </nav>
       </div>
 
@@ -237,7 +246,7 @@ const AdminLayout = ({ user }) => {
                     <div className="border-t border-gray-100">
                       <button
                        onClick={() => {
-                        if (user === "hod") {
+                        if (user === "hod"||user==="manager") {
                           localStorage.removeItem("access_token");
                           navigate("/login");
                         }
